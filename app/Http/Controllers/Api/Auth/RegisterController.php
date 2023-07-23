@@ -7,6 +7,7 @@ use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Validation\ValidationException;
 
 class RegisterController extends Controller
 {
@@ -19,7 +20,8 @@ class RegisterController extends Controller
 
         return response()->json([
             'user' => $user,
-            'token' => $user->createToken('laravel_api_token')->plainTextToken
+            'token' => $user->createToken('laravel_api_token')->plainTextToken,
+            'status' => 'User telah dibuat'
         ]);
     }
 }

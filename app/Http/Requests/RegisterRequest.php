@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Facades\Hash;
 
 class RegisterRequest extends FormRequest
@@ -26,7 +28,7 @@ class RegisterRequest extends FormRequest
             'name' => 'required|string|max:150',
             'email' => 'required|email|max:150|unique:users',
             // 'password' => 'required|between:8,255|confirmed'
-            'password' => 'required|confirmed'
+            'password' => 'required'
         ];
     }
 
@@ -35,5 +37,28 @@ class RegisterRequest extends FormRequest
         $data = $this->validated();
         $data['password'] = Hash::make($data['password']);
         return $data;
+    }
+
+    public function messages(): array
+    {
+
+        return [
+            'name.required' => 'Nama harus isi',
+            'email.email' => 'Format email salah',
+            'email.required' => 'Email harus di isi',
+            'password.required' => 'Password harus di isi',
+
+
+        ];
+    }
+    protected function failedValidation(Validator $validator)
+    {
+        $errors = $validator->errors();
+
+        throw new HttpResponseException(response()->json([
+            'errors' => $validator->errors(),
+            'status' => true,
+            'message' => $errors->first('email') == "Email harus di isi" && $errors->first("password") == "Password harus di isi" && $errors->first("name") == 'Nama harus isi' ? 'Nama, Email dan password tidak boleh kosong' :  $errors->first()
+        ], 422));
     }
 }

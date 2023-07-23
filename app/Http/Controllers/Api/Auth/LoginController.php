@@ -17,7 +17,9 @@ class LoginController extends Controller
      */
     public function __invoke(LoginRequest $request)
     {
+        // dd($request);
         $user = User::where('email', $request->email)->first();
+
         if ($user != null) {
             if (!$user || !Hash::check($request->password, $user->password)) {
                 throw ValidationException::withMessages([
@@ -31,9 +33,8 @@ class LoginController extends Controller
             ]);
         } else {
             throw ValidationException::withMessages([
-                'email' => ['Email tidak sesuai silahkan ulangi atau Signup dulu.']
+                'email' => ['Email tidak sesuai silahkan ulangi atau Sign Up dulu']
             ]);
         }
-
     }
 }
