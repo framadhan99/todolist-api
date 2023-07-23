@@ -17,7 +17,7 @@ mysql -V
 Clone this repo.
 
 ```bash
-git clone https://github.com/framadhan99/todo-api
+git clone https://github.com/framadhan99/todolist-api.git
 ```
 
 Copy .env.
@@ -62,4 +62,4 @@ Enjoy!
 
 ## Built With
 
-* Laravel
+-   Laravel
